@@ -37,10 +37,18 @@ private String name;
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-
+    @ManyToOne
+    @JoinColumn(name = "shop_id")
+    private LaundryShop shop;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Order> orders;
+    @Column
+    private Double latitude;
+
+    @Column
+    private Double longitude;
+    private Boolean available = true;
 
 }

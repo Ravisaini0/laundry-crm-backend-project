@@ -1,34 +1,4 @@
-//package com.laundry.entity;
-//
-//import jakarta.persistence.*;
-//import lombok.AllArgsConstructor;
-//import lombok.Builder;
-//import lombok.Data;
-//import lombok.NoArgsConstructor;
-//
-//import java.time.LocalDate;
-//
-//@Entity
-//@Table(name = "orders")
-//@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Builder
-//public class Order {
-//
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-//
-//    private String pickupAddress;
-//    private LocalDate pickupDate;
-//    private String pickupTime;
-//    private String status;
-//
-//    private String userEmail;
-//
-//    // getters & setters
-//}
+
 package com.laundry.entity;
 
 import jakarta.persistence.*;
@@ -37,44 +7,13 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 import com.laundry.model.OrderStatus;
 import jakarta.validation.constraints.*;
 
 
-//@Entity
-//@Table(name = "orders")
-//@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Builder
-//public class Order {
-//
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-//
-//    @Column(name = "pickup_address", nullable = false)
-//    private String pickupAddress;
-//
-//    @Column(name = "pickup_date", nullable = false)
-//    private LocalDate pickupDate;
-//
-//    @Column(name = "pickup_time", nullable = false)
-//    private String pickupTime;
-//
-//    @Enumerated(EnumType.STRING)
-//    private OrderStatus status;
-//
-//
-//    @Column(name = "created_at")
-//    private LocalDateTime createdAt;
-//
-//    // 🔥 IMPORTANT RELATION
-//    @ManyToOne
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private User user;
-//}
+
 @Entity
 @Table(name = "orders")
 @Data
@@ -91,6 +30,7 @@ public class Order {
     @NotBlank(message = "Pickup address is required")
     private String pickupAddress;
 
+    
     @Column(name = "pickup_date", nullable = false)
     @NotNull(message = "Pickup date is required")
     private LocalDate pickupDate;
@@ -113,6 +53,16 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "delivery_boy_id")
     private User deliveryBoy;
+    
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItem> items;
+    
+    @ManyToOne
+    @JoinColumn(name = "shop_id")
+    private LaundryShop shop;
+    
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
 
     @PrePersist
     public void setDefaultValues() {
